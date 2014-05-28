@@ -1,0 +1,69 @@
+ ------
+ Usage
+ ------
+ Stewart Cambridge
+ ------
+
+
+Filtering Test Suites
+
+%{include|source=apt/menu.apt}
+
+* Specifying A Suite Or Test
+
+  *
+
+    In the {{{./config.html}section on configuration}} is already covered how to specify a Test Suite, a nested Test Suite, or a Test Page.
+
+  *
+
+    Specifying a Suite will result in every Test in that Suite and in Suites nested underneath being run. All other Suites will be excluded.
+
+  *
+
+    Specifying an individual Test will result in only that single Test being run, and nothing else.
+
+  *
+
+    Sample configuration is shown here from the {{{../fitnesse-launcher-java-example/index.html}Example Java Project}}.
+
++-----+
+<!-- These 3 are mutually exclusive; choose one. -->
+<suite>JavaExample</suite>
+<suite>JavaExample.SlimTest</suite>
+<test>JavaExample.SlimTest.SlimDecisionTable</test>
++-----+
+
+* Include / Exclude Filtering Using FitNesse Tags
+
+ *
+
+   FitNesse has a facility for its wiki test pages to be tagged with one or more tags. These tags can then be used to include or exclude those pages during test runs.
+
+  [[1]]
+
+        The FitNesse wiki pages to be filtered need to be tagged, as illustrated in this screenshot.
+
+[./images/FitNesse_Tags.png] Tagging a FitNesse Test Page
+ 
+  [[2]]
+
+        Once wiki pages have been tagged, specify those tags as a comma-separated list for inclusion or exclusion in the test run.
+
+   * This filtering is additional to the Suite or Test which is configured as above.
+
+   * Sample configuration is shown here from the {{{../fitnesse-launcher-java-example/index.html}Example Java Project}}.
+
++-----+
+<suiteFilter>address,division</suiteFilter>
+<excludeSuiteFilter>division,decision</excludeSuiteFilter>
++-----+
+
+ *
+
+   Also see the {{{http://fitnesse.org/FitNesse.UserGuide.TestSuites.TagsAndFilters}FitNesse documentation}} on tagging.
+
+ *
+
+   There is {{{http://code.google.com/p/fitnesse-launcher-maven-plugin/issues/detail?id=12}an issue}} raised requesting an implementation of the <<<runTestsMatchingAllTags>>> filter. (<<<runTestsMatchingAnyTag>>> is a synonym for <<<suiteFilter>>>, but <<<runTestsMatchingAllTags>>> is new.) This is not currently implemented as it requires a change to FitNesse class {{{./fitnesse-apidocs/fitnesse/junit/TestHelper.html}<<<fitnesse.junit.TestHelper>>>}}.
+

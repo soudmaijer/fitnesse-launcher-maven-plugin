@@ -1,0 +1,38 @@
+ ------
+ Usage
+ ------
+ Stewart Cambridge
+ ------
+
+
+Getting Started
+
+%{include|source=apt/menu.apt}
+  
+* Advised Project Directory Structure
+  
++-----+
++- src/
+   +- main/
+   |  +- java/
+   |  +- resources/
+   |  +- webapp/
+   +- test/
+   |  +- java/
+   |  +- resources/
+   |  +- fitnesse/
+   |     +- MyTestSuite
+   |        +- SetUp
+   |        |  +- content.txt
+   |        |  +- properties.xml
+   |        +- NestedSuite
+   |        |  +- AnIndividualTest
+   |        |  |  +- content.txt
+   |        |  |  +- properties.xml
+   |        |  +- content.txt
+   |        |  +- properties.xml
+   |        +- content.txt
+   |        +- properties.xml
+   +- pom.xml
++-----+
+

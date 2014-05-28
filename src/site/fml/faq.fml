@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faqs id="FAQ" title="Frequently Asked Questions">
+  <part id="Running FitNesse using Maven">
+    <faq id="help">
+      <question>I ran '<code>mvn fitnesse:help</code>', but I got the help for <code>org.codehaus.mojo:fitnesse-maven-plugin</code> instead. What gives?</question>
+      <answer>
+<p><code>org.codehaus.mojo:fitnesse-maven-plugin</code> is the default plugin for the goal prefix '<code>fitnesse</code>'.</p>
+<ul>
+<li>Either use '<code>mvn fitnesse-launcher:help</code>',</li>
+<li>Or in order to use the goal prefix '<code>fitnesse</code>' with <strong>FitNesse Launcher</strong>, either:
+<ul>
+<li>The plugin needs to be configured in your <code>pom.xml</code>,</li>
+<li>Or '<code>pluginGroups</code>' needs to be configured in your <code>settings.xml</code>:
+<pre>
+  &lt;pluginGroups&gt;
+    &lt;pluginGroup>uk.co.javahelp.fitnesse&lt;/pluginGroup&gt;
+  &lt;/pluginGroups&gt;
+</pre>
+</li>
+</ul>
+</li>
+</ul>
+      </answer>
+    </faq>
+    <faq id="shutdown">
+      <question>If I run '<code>mvn fitnesse:wiki</code>' the prompt does not return to the command line, so how can I then run '<code>mvn fitnesse:shutdown</code>'?</question>
+      <answer>
+<p>Your options are:</p>
+<ul>
+<li>Run '<code>mvn fitnesse:shutdown</code>' from a different command line (ie. another terminal window).</li>
+<li>Run '<code>mvn fitnesse:wiki</code>' as a background process (by appending ' &amp;' on unix-like systems).</li>
+<li>Use '<code>Ctrl+C</code>' to exit the Maven process; although be aware that this will prevent Maven from finishing its build lifecycle (ie. the 'tear-down' goal will not be run, as the 'post-integration-test' phase will not be run).</li> 
+<li>Send a HTTP GET request to <code>http://localhost:&lt;port&gt;/?responder=shutdown</code> (for example, by using your browser).</li>
+</ul>
+      </answer>
+    </faq>
+    <faq id="standalone">
+      <question>Can I use this plugin standalone?</question>
+      <answer>
+          <p>From version 1.2.1 onwards, yes. First configure <code>&lt;pluginGroups&gt;</code> in your <code>settings.xml</code>, as in Q1 above, and then run:</p>
+<pre>
+mvn fitnesse:set-up fitnesse:wiki
+</pre>
+          <p>This will launch a vanilla FitNesse server, with no project test suites. Once launched visit <a href="http://localhost:9123" target="fitnesse">http://localhost:9123</a>.</p>
+          <p>(If you want to run any of the example tests that come with vanilla FitNesse, remember to configure the classpath as per <a href="usage.html#FitNesse_classpath_configuration">Usage documentation</a>).</p>
+      </answer>
+    </faq>
+    <faq id="properties">
+      <question>What FitNesse variables get exported?</question>
+      <answer>
+          <p>Please see Usage documentation on <a href="config.html#FitNesse_Variables">FitNesse Variables</a>.</p>
+      </answer>
+    </faq>
+    <faq id="whitespace">
+      <question>What if I have whitespace in the Current Working Directory path?</question>
+      <answer>
+	      <p>This <a href="https://code.google.com/p/fitnesse-launcher-maven-plugin/issues/detail?id=11">project issue</a> was raised with regard to whitespace in the Current Working Directory path.</p>
+	      <p>When tests are run in 'auto mode', whitespace is not an issue as the classpath for FitNesse is handled using Maven's internal 'ClassRealm' mechanism.</p>
+	      <p>When tests are tun in 'wiki mode', two directories always get added to the FitNesse classpath:</p>
+		      <ol>
+			      <li><pre>${project.build.directory}/test-classes</pre></li>
+			      <li><pre>${project.build.directory}/classes</pre></li>
+		      </ol>
+	      <p>
+		      Hence, if there is whitespace in the project base directory, then whitespace will be in the FitNesse classpath.
+		      FitNesse automatically detects this when wiki tests are run and adds quotes (<code>"</code>) around classpath elements which have whitespace.
+	      </p>
+	      <p>
+		      This appears to be sufficient for Windows operating systems to cope &#8212; the tests can be expected to work.
+		      On all other operating systems this quoting is not sufficient and the tests can be expected to error.
+	      </p>
+	      <p>
+		      On non-Windows operating systems <strong>FitNesse Launcher</strong> will detect and attempt to compensate for this by resolving the 2 classpath elements above as relative paths,
+		      which should eliminate whitespace in the classpath if the Current Working Directory is also the project base dircetory.
+		      (ie. <code>${project.build.directory}</code> is resolved to <code>./target</code>)
+	      </p>
+	      <p>
+		      See this <a href="http://stackoverflow.com/questions/17287166/what-is-the-correct-escaping-or-quoting-of-whitespace-in-a-classpath-path-ele">Stackoverflow question</a> for more detail, and <a href="https://github.com/unclebob/fitnesse/issues/278">this issue</a> raised with <a href="https://github.com/unclebob">Uncle Bob</a>.
+	      </p>
+      </answer>
+    </faq>
+  </part>
+</faqs>
